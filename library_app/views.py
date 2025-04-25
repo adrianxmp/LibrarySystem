@@ -1,4 +1,3 @@
-# library_app/views.py
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -61,7 +60,7 @@ class BookViewSet(viewsets.ModelViewSet):
         total_copies = int(book_data.get('total_copies', 0))
         available_copies = int(book_data.get('available_copies', total_copies))
         
-        # Ensure available_copies doesn't exceed total_copies
+        # Restrict available_copies to total_copies
         book_data['available_copies'] = min(available_copies, total_copies)
         
         # Create the book
@@ -206,7 +205,7 @@ class MemberViewSet(viewsets.ModelViewSet):
 class LoanViewSet(viewsets.ModelViewSet):
     queryset = Loan.objects.all()
     serializer_class = LoanSerializer
-    permission_classes = [IsLibrarian]  # Default permission for most actions
+    permission_classes = [IsLibrarian]
     
     # Override action map to set different permissions for my_loans
     @action(detail=False, methods=['get'], permission_classes=[IsAuthenticated])
@@ -284,20 +283,16 @@ class LoanViewSet(viewsets.ModelViewSet):
             loan_data['issue_date'] = timezone.now().date().isoformat()
         if 'due_date' in loan_data and isinstance(loan_data['due_date'], str):
             try:
-                # Try to parse the date if it's a string
                 due_date = datetime.strptime(loan_data['due_date'], '%Y-%m-%d').date()
                 loan_data['due_date'] = due_date.isoformat()
             except ValueError:
                 pass
         
-        # Create loan
         serializer = self.get_serializer(data=loan_data)
         serializer.is_valid(raise_exception=True)
         
-        # Save the loan
         loan = serializer.save()
         
-        # Update copy status and book available copies
         copy.status = 'Borrowed'
         copy.save()
         
@@ -305,7 +300,6 @@ class LoanViewSet(viewsets.ModelViewSet):
         book.available_copies -= 1
         book.save()
         
-        # Get the serialized data to return
         response_serializer = self.get_serializer(loan)
         headers = self.get_success_headers(response_serializer.data)
         
@@ -328,17 +322,15 @@ class LoanViewSet(viewsets.ModelViewSet):
         loan.return_date = timezone.now().date()
         loan.save()
         
-        # Update copy status
         copy = loan.copy
         copy.status = 'Available'
         copy.save()
         
-        # Update book available copies
         book = copy.book
         book.available_copies += 1
         book.save()
         
-        # Check for overdue and create fine if necessary
+        # Check for overdue and create fine if necessary (Just a note: we have not implemented this in the model)
         if loan.return_date > loan.due_date:
             days_overdue = (loan.return_date - loan.due_date).days
             fine_amount = days_overdue * 0.50  # $0.50 per day
@@ -548,7 +540,7 @@ class MemberLoansView(APIView):
     
     def get(self, request):
         """Get all loans for the current member"""
-        # Debug prints
+        # Debug prints for debugging purposes only
         print(f"User: {request.user}")
         print(f"User role: {request.user.role}")
         print(f"Is authenticated: {request.user.is_authenticated}")

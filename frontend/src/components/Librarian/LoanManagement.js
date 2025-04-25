@@ -33,6 +33,7 @@ const LoanManagement = () => {
   const [formData, setFormData] = useState({
     copy: '',
     member: '',
+    issue_date: dayjs(), // Today's date
     due_date: dayjs().add(14, 'day'),
   });
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
@@ -77,10 +78,12 @@ const LoanManagement = () => {
   }, [fetchLoans, fetchMembers, fetchBookCopies]);
 
   const handleOpenDialog = () => {
+    const today = dayjs();
     setFormData({
       copy: '',
       member: '',
-      due_date: dayjs().add(14, 'day'),
+      issue_date: today,
+      due_date: today.add(14, 'day'),
     });
     setOpenDialog(true);
   };
@@ -94,7 +97,23 @@ const LoanManagement = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleDateChange = (date) => {
+  const handleIssueDateChange = (date) => {
+    // When issue date changes, adjust due date if necessary
+    let newDueDate = formData.due_date;
+    
+    // If current due date is before the new issue date, set due date to issue date + 14 days
+    if (formData.due_date.isBefore(date)) {
+      newDueDate = date.add(14, 'day');
+    }
+    
+    setFormData({ 
+      ...formData, 
+      issue_date: date,
+      due_date: newDueDate
+    });
+  };
+
+  const handleDueDateChange = (date) => {
     setFormData({ ...formData, due_date: date });
   };
 
@@ -102,6 +121,7 @@ const LoanManagement = () => {
     try {
       await api.post('/loans/', {
         ...formData,
+        issue_date: formData.issue_date.format('YYYY-MM-DD'),
         due_date: formData.due_date.format('YYYY-MM-DD'),
       });
       showSnackbar('Loan created successfully', 'success');
@@ -143,16 +163,13 @@ const LoanManagement = () => {
       headerName: 'Actions',
       width: 150,
       renderCell: (params) => (
-        <>
-          {/* Removed the return book icon, only show delete icon */}
-          <IconButton
-            onClick={() => handleDelete(params.row.loanID)}
-            color="error"
-            title="Delete Loan"
-          >
-            <DeleteIcon />
-          </IconButton>
-        </>
+        <IconButton
+          onClick={() => handleDelete(params.row.loanID)}
+          color="error"
+          title="Delete Loan"
+        >
+          <DeleteIcon />
+        </IconButton>
       ),
     },
   ];
@@ -208,15 +225,23 @@ const LoanManagement = () => {
               >
                 {bookCopies.map((copy) => (
                   <MenuItem key={copy.copyID} value={copy.copyID}>
-                    {copy.book_title} (Copy {copy.copyID})
+                    {copy.book_title} (Copy #{copy.copyID})
                   </MenuItem>
                 ))}
               </Select>
             </FormControl>
             <DatePicker
+              label="Issue Date"
+              value={formData.issue_date}
+              onChange={handleIssueDateChange}
+              minDate={dayjs()} // Prevent selecting past dates
+              slotProps={{ textField: { fullWidth: true, margin: 'dense' } }}
+            />
+            <DatePicker
               label="Due Date"
               value={formData.due_date}
-              onChange={handleDateChange}
+              onChange={handleDueDateChange}
+              minDate={formData.issue_date} // Due date must be same as or after issue date
               slotProps={{ textField: { fullWidth: true, margin: 'dense' } }}
             />
           </DialogContent>

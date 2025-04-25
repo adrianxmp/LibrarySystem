@@ -17,8 +17,8 @@ class MemberSerializer(serializers.ModelSerializer):
         model = Member
         fields = ['memberID', 'name', 'email_address', 'phone_number', 'address', 'start_date']
         extra_kwargs = {
-            'memberID': {'required': False},  # Make memberID optional for creation
-            'start_date': {'required': False},  # Make start_date optional
+            'memberID': {'required': False},
+            'start_date': {'required': False},
         }
 
 class LibrarianSerializer(serializers.ModelSerializer):
@@ -30,9 +30,8 @@ class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book
         fields = ['bookID', 'title', 'edition', 'total_copies', 'available_copies']
-        # Don't make bookID read-only since we need to set it during creation
         extra_kwargs = {
-            'bookID': {'required': False}  # Make it optional so we can auto-generate
+            'bookID': {'required': False}
         }
 class BookCopySerializer(serializers.ModelSerializer):
     book_title = serializers.CharField(source='book.title', read_only=True)
@@ -67,7 +66,7 @@ class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = ['eventID', 'name', 'start_date', 'end_date', 'event_time', 'librarian', 'librarian_name']
-        read_only_fields = ['eventID', 'librarian']  # Make eventID and librarian read-only
+        read_only_fields = ['eventID', 'librarian']
 
 class AuthorSerializer(serializers.ModelSerializer):
     class Meta:

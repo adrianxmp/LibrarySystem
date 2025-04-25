@@ -8,7 +8,9 @@ import {
   Typography,
   Box,
   Alert,
+  Divider,
 } from '@mui/material';
+import InfoIcon from '@mui/icons-material/Info';
 import { login } from '../../services/auth';
 
 const Login = () => {
@@ -41,13 +43,15 @@ const Login = () => {
       >
         <Paper elevation={3} sx={{ p: 4, width: '100%' }}>
           <Typography component="h1" variant="h5" align="center" gutterBottom>
-            Library System Login
+            Library of the People System Login
           </Typography>
+          
           {error && (
             <Alert severity="error" sx={{ mb: 2 }}>
               {error}
             </Alert>
           )}
+          
           <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
             <TextField
               margin="normal"
@@ -82,6 +86,20 @@ const Login = () => {
               Sign In
             </Button>
           </Box>
+          
+          <Divider sx={{ my: 2 }} />
+          
+          <Alert 
+            severity="info" 
+            icon={<InfoIcon />}
+            sx={{ mt: 2 }}
+          >
+            <Typography variant="body2">
+              <strong>Note for Members:</strong> To access the library system, 
+              you must be registered by a librarian first. Please visit the 
+              library desk for registration.
+            </Typography>
+          </Alert>
         </Paper>
       </Box>
     </Container>

@@ -40,13 +40,13 @@ const Navbar = () => {
     { text: 'Members', icon: <PeopleIcon />, path: '/librarian/members' },
     { text: 'Loans', icon: <AssignmentIcon />, path: '/librarian/loans' },
     { text: 'Events', icon: <EventIcon />, path: '/librarian/events' },
-    // Removed Fines from the menu items
   ];
 
   const memberMenuItems = [
     { text: 'Dashboard', icon: <DashboardIcon />, path: '/member/dashboard' },
     { text: 'My Loans', icon: <AssignmentIcon />, path: '/member/my-loans' },
     { text: 'Book Catalog', icon: <MenuBookIcon />, path: '/member/books' },
+    { text: 'Library Events', icon: <EventIcon />, path: '/member/events' },
   ];
 
   const menuItems = userRole === 'librarian' ? librarianMenuItems : memberMenuItems;
@@ -64,7 +64,7 @@ const Navbar = () => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Library of the People Management System
+            Library Management System
           </Typography>
           <Button color="inherit" onClick={handleLogout}>
             Logout

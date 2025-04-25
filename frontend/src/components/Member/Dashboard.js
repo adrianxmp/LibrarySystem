@@ -2,6 +2,7 @@ import React from 'react';
 import { Grid, Paper, Typography, Box } from '@mui/material';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import EventIcon from '@mui/icons-material/Event';
 import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
@@ -10,6 +11,7 @@ const Dashboard = () => {
   const dashboardItems = [
     { title: 'My Loans', icon: <AssignmentIcon sx={{ fontSize: 40 }} />, path: '/member/my-loans' },
     { title: 'Book Catalog', icon: <MenuBookIcon sx={{ fontSize: 40 }} />, path: '/member/books' },
+    { title: 'Library Events', icon: <EventIcon sx={{ fontSize: 40 }} />, path: '/member/events' },
   ];
 
   return (

@@ -14,12 +14,12 @@ import BookManagement from './components/Librarian/BookManagement';
 import MemberManagement from './components/Librarian/MemberManagement';
 import LoanManagement from './components/Librarian/LoanManagement';
 import EventManagement from './components/Librarian/EventManagement';
-import FineManagement from './components/Librarian/FineManagement';
 
 // Member Components
 import MemberDashboard from './components/Member/Dashboard';
 import MyLoans from './components/Member/MyLoans';
 import BookCatalog from './components/Member/BookCatalog';
+import EventsCatalog from './components/Member/EventsCatalog';
 
 const theme = createTheme({
   palette: {
@@ -54,7 +54,6 @@ function App() {
                       <Route path="/members" element={<MemberManagement />} />
                       <Route path="/loans" element={<LoanManagement />} />
                       <Route path="/events" element={<EventManagement />} />
-                      <Route path="/fines" element={<FineManagement />} />
                     </Routes>
                   </Box>
                 </Box>
@@ -74,6 +73,7 @@ function App() {
                       <Route path="/dashboard" element={<MemberDashboard />} />
                       <Route path="/my-loans" element={<MyLoans />} />
                       <Route path="/books" element={<BookCatalog />} />
+                      <Route path="/events" element={<EventsCatalog />} />
                     </Routes>
                   </Box>
                 </Box>

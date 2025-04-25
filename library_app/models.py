@@ -81,7 +81,7 @@ class Loan(models.Model):
     loanID = models.AutoField(primary_key=True)
     copy = models.ForeignKey(BookCopy, on_delete=models.CASCADE)
     member = models.ForeignKey(Member, on_delete=models.CASCADE)
-    issue_date = models.DateField(default=timezone.now)  # Changed to DateField
+    issue_date = models.DateField(default=timezone.now)
     due_date = models.DateField()
     return_date = models.DateField(null=True, blank=True)
     loan_status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='Borrowed')
