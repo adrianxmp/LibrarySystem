@@ -1,6 +1,6 @@
 # Library Database Management System - Complete Setup Guide
 
-A comprehensive guide to set up and run the Library of the People Database Management System, which includes a Django REST Framework backend and React frontend.
+This is a guide on how to set up and run the Library of the People Database Management System.
 
 ## Prerequisites
 
