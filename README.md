@@ -1,4 +1,7 @@
-# Library Database Management System - Complete Setup Guide
+# Library Database Management System - Complete Setup Guide (Group G55)
+Authors: Adrian Ponce
+         Maria Munoz
+         Anne Lumumba
 
 This is a guide on how to set up and run the Library of the People Database Management System.
 
